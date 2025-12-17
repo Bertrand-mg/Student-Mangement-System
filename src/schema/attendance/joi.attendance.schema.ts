@@ -1,9 +1,6 @@
 import Joi from "joi";
 
 export const JoiCreateAttendanceSchema = Joi.object({
-  // studentId: Joi.string().required(),
-  // status: Joi.string().valid("present", "absent", "late", "excused").required(),
-
   attendances: Joi.array()
     .items(
       Joi.object({
@@ -15,4 +12,9 @@ export const JoiCreateAttendanceSchema = Joi.object({
     )
     .min(1)
     .required(),
+});
+
+export const JoiUpdateAttendanceSchema = Joi.object({
+  attendanceId: Joi.string().required(),
+  status: Joi.string().valid("present", "absent", "late", "excused").required(),
 });

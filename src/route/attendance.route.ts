@@ -5,7 +5,10 @@ import {
   authorizationValidation,
   validateMiddleware,
 } from "../middleware";
-import { JoiCreateAttendanceSchema } from "../schema";
+import {
+  JoiCreateAttendanceSchema,
+  JoiUpdateAttendanceSchema,
+} from "../schema";
 
 const attendanceRoute: Router = express.Router();
 const attendanceController = new AttendanceController();
@@ -31,5 +34,13 @@ attendanceRoute.post(
   validateMiddleware(JoiCreateAttendanceSchema),
   attendanceController.makeAttendace
 );
+
+// attendanceRoute.put(
+//   "/",
+//   authenticationValidation,
+//   authorizationValidation("admin"),
+//   validateMiddleware(JoiUpdateAttendanceSchema),
+//   attendanceController.makeAttendace
+// );
 
 export default attendanceRoute;
