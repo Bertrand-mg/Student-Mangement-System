@@ -1,0 +1,142 @@
+openapi: 3.0.4
+info:
+  title: Student Management System
+  version: 1.0.0
+  description: This API manages students, admins, attendances and leave requests
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local development server
+components:
+  schemas:
+    CreateUserRequest:
+      type: object
+      required:
+        - fullName
+        - gender
+        - email
+        - password
+      properties:
+        fullName:
+          type: string
+          example: "Alice Johnson"
+        gender:
+          type: string
+          example: female
+        email:
+          type: string
+          example: "alicejohnson@gmail.com"
+        password:
+          type: string
+          example: "alicejohnson"
+        isActive:
+          type: boolean
+          default:
+    LoginUserRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: "alicejohnson@gmail.com"
+        password:
+          type: string
+          example: "alicejohnson"
+    UserResponse:
+      type: object
+      required:
+        - id
+        - fullName
+        - gender
+        - email
+        - role
+        - isActive
+      properties:
+        id:
+          type: string
+          example: "12345"
+        fullName:
+          type: string
+          example: "Alice Johnson"
+        gender:
+          type: string
+          example: "female"
+        email:
+          type: string
+          example: "alicejohnson@gmail.com"
+        role:
+          type: string
+          example: "student"
+        isActive:
+          type: boolean
+          example: true
+    ApiResponse:
+      type: object
+      required:
+        - statusCode
+        - message
+        - data
+      properties:
+        statusCode:
+          type: integer
+          example: 201
+        message:
+          type: string
+          example: "User Registered Successfully"
+        data:
+          type: object
+tags:
+  - name: Authentication
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: User Registration
+      description: Creates a new user with the given information.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+      responses:
+        "201":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/UserResponse"
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User Login
+      description: Signing a user with Email and Passowrd.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginUserRequest"
+      responses:
+        "200":
+          description: Login successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - $ref: "#/components/schemas/ApiResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: string

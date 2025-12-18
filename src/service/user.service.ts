@@ -1,5 +1,5 @@
 import { UserModel } from "../model";
-import { UserInterface } from "../types";
+import { CreateUserInterface, UserInterface } from "../types";
 
 export class UserService {
   fetchAllUsers = async () => {
@@ -14,7 +14,7 @@ export class UserService {
     return await UserModel.findOne({ email });
   };
 
-  createNewUser = async (user: UserInterface) => {
+  createNewUser = async (user: CreateUserInterface) => {
     const newUser = await UserModel.create({
       ...user,
     });

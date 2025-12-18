@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserInterface } from "../types";
+import { CreateUserInterface, UserInterface, UserResponse } from "../types";
 import { generateToken, ResponseService } from "../util";
 import { hashPassword, comparePassword } from "../util";
 import { UserService } from "../service";
@@ -28,7 +28,7 @@ export class AuthController {
         return responseService.response({
           res,
           statusCode: 200,
-          message: "Login Successful",
+          message: "Login Successfully",
           data: token,
         });
       }
@@ -50,9 +50,12 @@ export class AuthController {
 
   register = async (req: Request, res: Response) => {
     try {
-      const { fullName, gender, email, role, password, isActive } = req.body;
+      const { fullName, gender, email, password, isActive } = req.body;
+      let { role } = req.body;
 
-      const newUser: UserInterface = {
+      if (role == undefined) role == "student";
+
+      const newUser: CreateUserInterface = {
         fullName,
         gender,
         email,
@@ -61,12 +64,12 @@ export class AuthController {
         isActive,
       };
 
-      const user = await userService.createNewUser(newUser);
+      const user = (await userService.createNewUser(newUser)) as UserResponse;
 
-      return responseService.response({
+      return responseService.response<UserResponse>({
         res,
         statusCode: 201,
-        message: "User Registered Succesffully",
+        message: "User Registered Successfully",
         data: user,
       });
     } catch (error) {
